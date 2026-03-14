@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-
         DOCKERHUB_USER = 'antoniofajardo'
         APP_NAME = 'proyecto-ci-cd-antonio'
     }
@@ -10,36 +9,31 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-
                 checkout scm
             }
         }
 
         stage('Test') {
             steps {
-
-                // sh 'python3 -m pip install flask pytest' 
-        	// sh 'python3 -m pytest test_app.py'
+                // Ponemos un echo para que la etapa no esté vacía y no dé error
+                echo 'Saltando tests temporalmente...'
             }
         }
 
         stage('Build Image') {
             steps {
-  
                 sh "docker build -t ${DOCKERHUB_USER}/${APP_NAME}:latest ."
             }
         }
 
         stage('DockerHub') {
             steps {
-   
                 sh "docker push ${DOCKERHUB_USER}/${APP_NAME}:latest"
             }
         }
 
         stage('Deploy') {
             steps {
-
                 sh 'kubectl apply -f deployment.yaml'
                 sh 'kubectl apply -f service.yaml'
             }
