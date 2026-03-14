@@ -14,6 +14,7 @@ spec:
     spec:
       containers:
       - name: python-app
-        image: TU_USUARIO_DOCKERHUB/python-app:latest
+        image: antoniofajardo/proyecto-ci-cd-antonio:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 5000
