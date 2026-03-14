@@ -18,8 +18,8 @@ pipeline {
         stage('Test') {
             steps {
 
-                sh 'pip install flask pytest'
-                sh 'pytest test_app.py'
+                sh 'pip3 install flask pytest'
+                sh 'python3 -m pytest test_app.py'
             }
         }
 
