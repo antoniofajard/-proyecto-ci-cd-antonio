@@ -1,11 +1,14 @@
-# Usamos la imagen de Jenkins que YA está descargada y no necesita internet
-FROM jenkins/jenkins:lts
+# Usamos una imagen que ya tiene Python instalado
+FROM python:3.9-slim
 
-WORKDIR /app
+# Instalamos Flask (lo que necesita tu app.py)
+RUN pip install flask
 
-COPY . .
+# Copiamos tu archivo app.py dentro del contenedor
+COPY app.py /app.py
 
+# Exponemos el puerto que usa tu código
 EXPOSE 5000
 
-# Usamos echo para que no falle por falta de python
-CMD ["echo", "Imagen construida con exito"]
+# El comando para arrancar la aplicación
+CMD ["python", "/app.py"]
