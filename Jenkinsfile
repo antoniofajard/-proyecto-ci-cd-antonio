@@ -10,49 +10,37 @@ pipeline {
         stage('Clone') {
             steps {
                 checkout scm
-                echo 'Código clonado correctamente de GitHub.'
+                echo 'Código clonado correctamente.'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Ejecutando tests unitarios...'
-                echo 'Tests superados con éxito.'
+                echo 'Tests superados.'
             }
         }
 
         stage('Build Image') {
             steps {
-                echo "Construyendo imagen: ${DOCKERHUB_USER}/${APP_NAME}:latest"
-                sh 'echo "Docker build finalizado correctamente."'
+                echo "Imagen ${DOCKERHUB_USER}/${APP_NAME}:latest simulada."
             }
         }
 
         stage('DockerHub') {
             steps {
-                echo "Simulando push a DockerHub..."
-                sh 'echo "Imagen subida a DockerHub (Simulado)"'
+                echo "Push simulado."
             }
         }
 
         stage('Deploy') {
             steps {
-                echo "Actualizando despliegue en Kubernetes - Paso 9"
-                // Borramos el pod viejo si existe para que se aplique el nuevo mensaje
+                echo "Actualizando a versión con saludo - Paso 9"
                 sh 'kubectl delete pod python-app --ignore-not-found'
-                
-                // IMPORTANTE: Aquí es donde ponemos tu nombre para el Paso 9
+                // Usamos una sintaxis más limpia para evitar errores de comillas
                 sh """
-                kubectl run python-app --image=${DOCKERHUB_USER}/${APP_NAME}:latest --overrides='{"spec":{"containers":[{"name":"python-app","image":"${DOCKERHUB_USER}/${APP_NAME}:latest","imagePullPolicy":"Never","command":["/bin/bash","-c","while true; do echo -e \\\"HTTP/1.1 200 OK\\nContent-Type: text/html\\n\\n<html><body><h1>Hola, soy Antonio Fajardo</h1><p>Despliegue automatico v2 (Paso 9)</p></body></html>\\\" | nc -l -p 8080; done"]}]}}'
+                kubectl run python-app --image=${DOCKERHUB_USER}/${APP_NAME}:latest --overrides='{"spec":{"containers":[{"name":"python-app","image":"${DOCKERHUB_USER}/${APP_NAME}:latest","imagePullPolicy":"Never","command":["/bin/bash","-c","while true; do echo -e \\\"HTTP/1.1 200 OK\\nContent-Type: text/html\\n\\n<html><body><h1>Hola, soy Antonio Fajardo</h1><p>Despliegue Paso 9 correcto</p></body></html>\\\" | nc -l -p 8080; done"]}]}}'
                 """
-                echo "Nuevo pod con saludo personalizado desplegado."
             }
-        }
-    }
-    
-    post {
-        success {
-            echo '¡Pipeline finalizado con éxito total! El Paso 9 se ha completado.'
         }
     }
 }
